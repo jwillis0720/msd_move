@@ -476,6 +476,7 @@ mview reinterpolate, object=2b1a_h
 mview reinterpolate, object=2xwt_h 
 mview store, object=A1
 mview reinterpolate, object=A1
+scene 014, store
 mview store, 460, scene=014
 
 
