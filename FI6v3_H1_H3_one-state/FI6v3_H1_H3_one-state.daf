@@ -1,0 +1,5 @@
+STATE_VECTOR H1_3ztn_FI6v3 H1_3ztn_FI6v3.state
+STATE_VECTOR H3_3ztj_FI6v3 H3_3ztj_FI6v3.state
+SCALAR_EXPRESSION best_H1_3ztn_FI6v3 = vmin(  H1_3ztn_FI6v3  )
+SCALAR_EXPRESSION best_H3_3ztj_FI6v3 = vmin(  H3_3ztj_FI6v3  )
+FITNESS best_H1_3ztn_FI6v3 + best_H3_3ztj_FI6v3 
