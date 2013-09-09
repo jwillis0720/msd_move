@@ -215,43 +215,43 @@ translate [0,70,0], object=title_2
 translate [0,70,0], object=title_3
 translate [0,70,0], object=title_4
 
-mview store, object=title
-mview store, object=title_2
-mview store, object=title_3
-mview store, object=title_4
-mview store, object=title_5
-mview store, object=2b1a_ant
-mview store, object=2b1a_h 
-mview store, object=2b1a_l
-mview store, object=2b1a_ant_copy
-mview store, object=2b1a_h_copy
-mview store, object=2b1a_l_copy
-mview store, object=A1
-mview store, object=2b1a_ant_title
-mview store, object=2b1a_l_title
-mview store, object=2b1a_gl_title
-mview store, object=3hmx_ant
-mview store, object=3hmx_h 
-mview store, object=3hmx_l
-mview store, object=3hmx_ant_copy
-mview store, object=3hmx_h_copy
-mview store, object=3hmx_l_copy
-mview store, object=B1
-mview store, object=3hmx_ant_title
-mview store, object=3hmx_l_title
-mview store, object=3hmx_gl_title
-mview store, object=2xwt_ant
-mview store, object=2xwt_h 
-mview store, object=2xwt_l
-mview store, object=2xwt_ant_copy
-mview store, object=2xwt_h_copy
-mview store, object=2xwt_l_copy
-mview store, object=1
-mview store, object=2xwt_ant_title
-mview store, object=2xwt_l_title
-mview store, object=2xwt_gl_title
-mview store, object=2xwt_gl
-mview store, object=complex_title
+mview store, 1,object=title
+mview store, 1,object=title_2
+mview store, 1,object=title_3
+mview store, 1,object=title_4
+mview store, 1,object=title_5
+mview store, 1,object=2b1a_ant
+mview store, 1,object=2b1a_h 
+mview store, 1,object=2b1a_l
+mview store, 1,object=2b1a_ant_copy
+mview store, 1,object=2b1a_h_copy
+mview store, 1,object=2b1a_l_copy
+mview store, 1,object=A1
+mview store, 1,object=2b1a_ant_title
+mview store, 1,object=2b1a_l_title
+mview store, 1,object=2b1a_gl_title
+mview store, 1,object=3hmx_ant
+mview store, 1,object=3hmx_h 
+mview store, 1,object=3hmx_l
+mview store, 1,object=3hmx_ant_copy
+mview store, 1,object=3hmx_h_copy
+mview store, 1,object=3hmx_l_copy
+mview store, 1,object=B1
+mview store, 1,object=3hmx_ant_title
+mview store, 1,object=3hmx_l_title
+mview store, 1,object=3hmx_gl_title
+mview store, 1,object=2xwt_ant
+mview store, 1,object=2xwt_h 
+mview store, 1,object=2xwt_l
+mview store, 1,object=2xwt_ant_copy
+mview store, 1,object=2xwt_h_copy
+mview store, 1,object=2xwt_l_copy
+mview store, 1,object=1
+mview store, 1,object=2xwt_ant_title
+mview store, 1,object=2xwt_l_title
+mview store, 1,object=2xwt_gl_title
+mview store, 1,object=2xwt_gl
+mview store, 1,object=complex_title
 show surface, antigens + light + heavy
 show cartoon, heavy
 show labels, title 
@@ -268,15 +268,15 @@ show labels, 2b1a_ant_title
 show labels, 2xwt_ant_title
 show labels, 3hmx_ant_title
 color magenta, antigens
-mview store, object=2b1a_ant
-mview store, object=2xwt_ant
-mview store, object=3hmx_ant
-mview store, object=title
-mview store, object=title_2
-mview store, object=2b1a_ant_title
-mview store, object=2xwt_ant_title
-mview store, object=3hmx_ant_title
-mview store, object=antigens
+mview store, 50,object=2b1a_ant
+mview store, 50,object=2xwt_ant
+mview store, 50,object=3hmx_ant
+mview store, 50,object=title
+mview store, 50,object=title_2
+mview store, 50,object=2b1a_ant_title
+mview store, 50,object=2xwt_ant_title
+mview store, 50,object=3hmx_ant_title
+mview store, 50,object=antigens
 scene 002, store 
 mview store, 50, scene=002
 
@@ -286,9 +286,9 @@ frame 70
 translate [0,30,0], object=3hmx_ant
 translate [0,30,0], object=2b1a_ant
 translate [0,30,0], object=2xwt_ant
-mview store, object=3hmx_ant
-mview store, object=2b1a_ant
-mview store, object=2xwt_ant
+mview store, 70,object=3hmx_ant
+mview store, 70,object=2b1a_ant
+mview store, 70,object=2xwt_ant
 mview interpolate, object=3hmx_ant
 mview interpolate, object=2b1a_ant
 mview interpolate, object=2xwt_ant
@@ -301,9 +301,9 @@ frame 100
 my_rotate 180, 3hmx_ant, center=com
 my_rotate 180, 2b1a_ant
 my_rotate 180, 2xwt_ant
-mview store, object=3hmx_ant
-mview store, object=2b1a_ant
-mview store, object=2xwt_ant
+mview store, 100,object=3hmx_ant
+mview store, 100,object=2b1a_ant
+mview store, 100,object=2xwt_ant
 mview reinterpolate, object=3hmx_ant
 mview reinterpolate, object=2b1a_ant
 mview reinterpolate, object=2xwt_ant
@@ -317,9 +317,9 @@ scene 005, store
 my_rotate 180, 3hmx_ant, center=com
 my_rotate 180, 2b1a_ant
 my_rotate 180, 2xwt_ant
-mview store, object=3hmx_ant
-mview store, object=2b1a_ant
-mview store, object=2xwt_ant
+mview store, 135,object=3hmx_ant
+mview store, 135,object=2b1a_ant
+mview store, 135,object=2xwt_ant
 mview reinterpolate, object=3hmx_ant
 mview reinterpolate, object=2b1a_ant
 mview reinterpolate, object=2xwt_ant
@@ -335,12 +335,12 @@ color magenta, light
 super 3hmx_ant, 3hmx_ant_copy
 super 2xwt_ant, 2xwt_ant_copy
 super 2b1a_ant, 2b1a_ant_copy
-mview store, object=3hmx_ant
-mview store, object=2b1a_ant_copy
-mview store, object=2xwt_ant_copy
-mview store, object=3hmx_l
-mview store, object=2b1a_l
-mview store, object=2xwt_l
+mview store, 160,object=3hmx_ant
+mview store, 160,object=2b1a_ant_copy
+mview store, 160,object=2xwt_ant_copy
+mview store, 160,object=3hmx_l
+mview store, 160,object=2b1a_l
+mview store, 160,object=2xwt_l
 mview reinterpolate, object=3hmx_ant
 mview reinterpolate, object=2b1a_ant
 mview reinterpolate, object=2xwt_ant
@@ -354,9 +354,9 @@ frame 190
 translate [-15,0,0], object=3hmx_l
 translate [-15,0,0], object=2b1a_l
 translate [-15,0,0], object=2xwt_l
-mview store, object=3hmx_l
-mview store, object=2b1a_l
-mview store, object=2xwt_l
+mview store, 190,object=3hmx_l
+mview store, 190,object=2b1a_l
+mview store, 190,object=2xwt_l
 mview interpolate, object=3hmx_l
 mview interpolate, object=2b1a_l
 mview interpolate, object=2xwt_l
@@ -368,9 +368,9 @@ frame 220
 my_rotate 180, 3hmx_l
 my_rotate 180, 2b1a_l
 my_rotate 180, 2xwt_l
-mview store, object=3hmx_l
-mview store, object=2b1a_l
-mview store, object=2xwt_l
+mview store, 220,object=3hmx_l
+mview store, 220,object=2b1a_l
+mview store, 220,object=2xwt_l
 mview reinterpolate, object=3hmx_l
 mview reinterpolate, object=2b1a_l
 mview reinterpolate, object=2xwt_l
@@ -382,9 +382,9 @@ frame 250
 my_rotate 180, 3hmx_l
 my_rotate 180, 2b1a_l
 my_rotate 180, 2xwt_l
-mview store, object=3hmx_l
-mview store, object=2b1a_l
-mview store, object=2xwt_l
+mview store, 250,object=3hmx_l
+mview store, 250,object=2b1a_l
+mview store, 250,object=2xwt_l
 mview reinterpolate, object=3hmx_l
 mview reinterpolate, object=2b1a_l
 mview reinterpolate, object=2xwt_l
@@ -398,12 +398,12 @@ color sand, light
 super 3hmx_l, 3hmx_l_copy
 super 2xwt_l, 2xwt_l_copy
 super 2b1a_l, 2b1a_l_copy
-mview store, object=3hmx_l
-mview store, object=2b1a_l
-mview store, object=2xwt_l
-mview store, object=3hmx_h
-mview store, object=2b1a_h
-mview store, object=2xwt_h
+mview store, 280,object=3hmx_l
+mview store, 280,object=2b1a_l
+mview store, 280,object=2xwt_l
+mview store, 280,object=3hmx_h
+mview store, 280,object=2b1a_h
+mview store, 280,object=2xwt_h
 color magenta, vh551
 mview reinterpolate, object=3hmx_l
 mview reinterpolate, object=2b1a_l
@@ -413,12 +413,12 @@ mview store, 280, scene=010
 
 
 frame 330
-mview store, object=3hmx_h
-mview store, object=2b1a_h
-mview store, object=2xwt_h
-mview store, object=A1
-mview store, object=B1
-mview store, object=C1
+mview store, 330,object=3hmx_h
+mview store, 330,object=2b1a_h
+mview store, 330,object=2xwt_h
+mview store, 330,object=A1
+mview store, 330,object=B1
+mview store, 330,object=C1
 hide everything, not vh551
 scene 011, store 
 mview store, 330, scene=011
@@ -441,25 +441,25 @@ set_view (\
      0.000191912,    0.000052718, -182.240753174,\
      7.153404236,  -15.651230812,    4.890758514,\
    133.269271851,  231.092132568,  -20.000000000 )
-mview store, object=3hmx_h
-mview store, object=2b1a_h
-mview store, object=2xwt_h
-mview store, object=A1
-mview store, object=B1
-mview store, object=C1
+mview store, 400, object=3hmx_h
+mview store, 400, object=2b1a_h
+mview store, 400, object=2xwt_h
+mview store, 400, object=A1
+mview store, 400, object=B1
+mview store, 400, object=C1
 mview reinterpolate, object=3hmx_h
 mview reinterpolate, object=2b1a_h
 mview reinterpolate, object=2xwt_h
 scene 012, store 
 mview store, 400, scene=012
 #broken line
-#mview reinterpolate, scene=012
+mview reinterpolate, scene=012
 
 frame 430
 hide surface, *_h
-mview store, object=3hmx_h
-mview store, object=2b1a_h
-mview store, object=2xwt_h
+mview store, 430,object=3hmx_h
+mview store, 430,object=2b1a_h
+mview store, 430,object=2xwt_h
 mview reinterpolate, object=3hmx_h
 mview reinterpolate, object=2b1a_h
 mview reinterpolate, object=2xwt_h
@@ -468,14 +468,15 @@ mview store, 430, scene=013
 
 frame 460
 show sticks, A1
-mview store, object=3hmx_h
-mview store, object=2b1a_h
-mview store, object=2xwt_h
+mview store, 460,object=3hmx_h
+mview store, 460,object=2b1a_h
+mview store, 460,object=2xwt_h
 mview reinterpolate, object=3hmx_h
 mview reinterpolate, object=2b1a_h
 mview reinterpolate, object=2xwt_h 
 mview store, object=A1
 mview reinterpolate, object=A1
+scene 014, store
 mview store, 460, scene=014
 
 
