@@ -9,17 +9,165 @@ config_mouse three_button_motions, 1
 
 
 python
+from pymol.cgo import *
+from math import *
+from pymol import cmd
+from re import *
+ 
+def spectrumbar (*args, **kwargs):
+ 
+    """
+    Author Sean M. Law
+    University of Michigan
+    seanlaw_(at)_umich_dot_edu
+ 
+    USAGE
+ 
+    While in PyMOL
+ 
+    run spectrumbar.py
+ 
+    spectrumbar (RGB_Colors,radius=1.0,name=spectrumbar,head=(0.0,0.0,0.0),tail=(10.0,0.0,0.0),length=10.0, ends=square)
+ 
+    Parameter     Preset         Type     Description
+    RGB_Colors    [1.0,1.0,1.0]  N/A      RGB colors can be specified as a
+                                          triplet RGB value or as PyMOL
+                                          internal color name (i.e. red)
+    radius        1.0            float    Radius of cylindrical spectrum bar
+    name          spectrumbar    string   CGO object name for spectrum bar
+    head          (0.0,0.0,0.0)  float    Starting coordinate for spectrum bar
+    tail          (10.0,0.0,0.0) float    Ending coordinate for spectrum bar
+    length        10.0           float    Length of spectrum bar
+    ends          square         string   For rounded ends use ends=rounded
+ 
+    Examples:
+ 
+    spectrumbar red, green, blue
+    spectrumbar 1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0
+ 
+    The above two examples produce the same spectrumbar!
+ 
+    spectrumbar radius=5.0
+    spectrumbar length=20.0
+ 
+    """
+ 
+    rgb=[1.0, 1.0, 1.0]
+    name="spectrumbar"
+    radius=1.0
+    ends="square"
+    x1=0
+    y1=0
+    z1=0
+    x2=10
+    y2=0
+    z2=0
+    num=re.compile('[0-9]')
+    abc=re.compile('[a-z]')
+ 
+    for key in kwargs:
+        if (key == "radius"):
+            radius = float(kwargs["radius"])
+        elif (key == "name"):
+            name=kwargs["name"]
+        elif (key == "head"):
+            head=kwargs["head"]
+            head=head.strip('" []()')
+            x1,y1,z1=map(float,head.split(','))
+        elif (key == "tail"):
+            tail=kwargs["tail"]
+            tail=tail.strip('" []()')
+            x2,y2,z2=map(float,tail.split(','))
+        elif (key == "length"):
+            if (abc.search(kwargs["length"])):
+                print "Error: The length must be a value"
+                return
+            else:
+                x2=float(kwargs["length"]);
+        elif (key == "ends"):
+            ends=kwargs["ends"]
+        elif (key != "_self"):
+            print "Ignoring unknown option \""+key+"\""
+        else:
+            continue
+ 
+    args=list(args)
+    if (len(args)>=1):
+        rgb=[]
+    while (len(args)>=1):
+        if (num.search(args[0]) and abc.search(args[0])):
+            if (str(cmd.get_color_tuple(args[0])) != "None"):
+                rgb.extend(cmd.get_color_tuple(args.pop(0)))
+            else:
+                return
+        elif (num.search(args[0])):
+            rgb.extend([float(args.pop(0))])
+        elif (abc.search(args[0])):
+            if (str(cmd.get_color_tuple(args[0])) != "None"):
+                rgb.extend(cmd.get_color_tuple(args.pop(0)))
+            else:
+                return
+        else:
+            print "Error: Unrecognized color format \""+args[0]+"\""
+            return
+ 
+    if (len(rgb) % 3):
+        print "Error: Missing RGB value"
+        print "Please double check RGB values"
+        return
+ 
+    dx=x2-x1
+    dy=y2-y1
+    dz=z2-z1
+    if (len(rgb) == 3):
+        rgb.extend([rgb[0]])
+        rgb.extend([rgb[1]])
+        rgb.extend([rgb[2]])
+    t=1.0/(len(rgb)/3.0-1)
+    c=len(rgb)/3-1
+    s=0
+    bar=[]
+ 
+    while (s < c):
+        if (len(rgb) >0):
+            r=rgb.pop(0)
+            g=rgb.pop(0)
+            b=rgb.pop(0)
+        if (s == 0 and ends == "rounded"):
+            bar.extend([COLOR, float(r), float(g), float(b), SPHERE, x1+(s*t)*dx, y1+(s*t)*dy, z1+(s*t)*dz, radius])
+        bar.extend([CYLINDER])
+        bar.extend([x1+(s*t)*dx, y1+(s*t)*dy, z1+(s*t)*dz])
+        bar.extend([x1+(s+1)*t*dx, y1+(s+1)*t*dy, z1+(s+1)*t*dz])
+        bar.extend([radius, float(r), float(g), float(b)])
+        if (len(rgb) >= 3):
+            bar.extend([float(rgb[0]), float(rgb[1]), float(rgb[2])])
+            r=rgb[0]
+            g=rgb[1]
+            b=rgb[2]
+        else:
+            bar.extend([float(r), float(g), float(b)])
+        if (s == c-1 and ends == "rounded"):
+            bar.extend([COLOR, float(r), float(g), float(b), SPHERE, x1+(s+1)*t*dx, y1+(s+1)*t*dy, z1+(s+1)*t*dz, radius])
+        s=s+1
+ 
+    cmd.delete(name)
+    cmd.load_cgo(bar,name)
+ 
+ 
+    return
+cmd.extend("spectrumbar",spectrumbar)
+
 import glob
 path = "/Users/jordanwillis/workspace/specificaim3/msd_movie/files/"
 #these pdbs only have the designed residues in them so it saves a lot of memory
 l1 = glob.glob(path+"*A*.pdb")
 l2 = glob.glob(path+"*B*.pdb")
 l3 = glob.glob(path+"*C*.pdb")
-for j in l1[:10]:
+for j in l1[:50]:
 	cmd.load(j,"A1")
-for g in l2[:10]:
+for g in l2[:50]:
 	cmd.load(g,"B1")
-for d in l3[:10]:
+for d in l3[:50]:
 	cmd.load(d,"C1")
 cmd.load(path+"2b1a.pdb", "A_bb")
 cmd.load(path+"2xwt.pdb", "B_bb")
@@ -39,19 +187,19 @@ def my_rotate(angle, object, axis='y',center=""):
 
 cmd.extend('my_rotate', my_rotate)
 
-def store_all(string):
-	objects = ["2b1a_gl","3hmx_gl","2xwt_gl","2b1a_h","2b1a_l","2xwt_ant","3hmx_ant","3hmx_l","3hmx_h","2b1a_ant","2xwt_h","2xwt_l"
-                ,"2b1a_ant_copy","2xwt_ant_copy","3hmx_ant_copy","2b1a_l_copy","2xwt_l_copy","3hmx_l_copy","2b1a_h_copy",
-                "2xwt_h_copy","3hmx_h_copy","com","A1","B1","C1"]
-	for i in objects:
-		cmd.mview(string, object=i)
+# def store_all(string):
+# 	objects = ["2b1a_gl","3hmx_gl","2xwt_gl","2b1a_h","2b1a_l","2xwt_ant","3hmx_ant","3hmx_l","3hmx_h","2b1a_ant","2xwt_h","2xwt_l"
+#                 ,"2b1a_ant_copy","2xwt_ant_copy","3hmx_ant_copy","2b1a_l_copy","2xwt_l_copy","3hmx_l_copy","2b1a_h_copy",
+#                 "2xwt_h_copy","3hmx_h_copy","com","A1","B1","C1"]
+# 	for i in objects:
+# 		cmd.mview(string, object=i)
 	
-cmd.extend("store_all",store_all)
+# cmd.extend("store_all",store_all)
 
-def store_scene(number):
-		cmd.scene(str(number),"store")
-		cmd.mview("store",scene=number)	
-cmd.extend("store_scene",store_scene)
+# def store_scene(number):
+# 		cmd.scene(str(number),"store")
+# 		cmd.mview("store",scene=number)	
+# cmd.extend("store_scene",store_scene)
 python end
 
 
@@ -92,6 +240,9 @@ select light, chain B + chain L
 select msd_residues, A1 + B1 + C1
 select heavy, not msd_residues and chain H 
 
+select 2b1a_muts, 2b1a_h and resi 5+14+16+23+24+29+30+31+32+34+40+46+48+51+52+54+58+65+70+72+74+76+77+80+84+88+93+97+98
+select 2xwt_muts, 2xwt_h and resi 5+14+16+23+24+29+30+31+32+34+40+46+48+51+52+54+58+65+70+72+74+76+77+80+84+88+93+97+98
+select 3hmx_muts, 3hmx_h and resi 5+14+16+23+24+29+30+31+32+34+40+46+48+51+52+54+58+65+70+72+74+76+77+80+84+88+93+97+98
 
 create 2b1a_gl, 2b1a_h and resi 1-98
 create 2xwt_gl, 2xwt_h and resi 1-98
@@ -170,7 +321,7 @@ set label_size, 30
 hide
 
 # # #set up frame movie using just state one
-mset 1 x460
+mset 1 x560
 # #SCENE 1 - Showcasing antigens
 # 
 # #store_all is an extension command we using in pymol that saves mview stores all objects
@@ -213,7 +364,7 @@ translate [0,0,30], object=2xwt_gl_title
 translate [0,70,0], object=title
 translate [0,70,0], object=title_2
 translate [0,70,0], object=title_3
-translate [0,70,0], object=title_4
+translate [0,40,0], object=title_4
 
 mview store, object=title
 mview store, object=title_2
@@ -393,6 +544,7 @@ mview store, 250, scene=009
 
 frame 280
 hide everything, 2b1a_l + 3hmx_l + 2xwt_l + 3hmx_ant + 2b1a_ant + 2xwt_ant + title_3 + 2xwt_l_title + 3hmx_l_title + 2b1a_l_title
+hide nonbonded, title_4
 show labels, title_4 + 2b1a_gl_title + 2xwt_gl_title + 3hmx_gl_title
 color sand, light
 super 3hmx_l, 3hmx_l_copy
@@ -420,6 +572,11 @@ mview store, object=A1
 mview store, object=B1
 mview store, object=C1
 hide everything, not vh551
+pseudoatom title_5, 2xwt_h
+hide nonbonded, title_5
+translate [0,40,0], object=title_5
+label title_5, "Each with unique somatic mutations that alter framework and CDR structure"
+show labels, title_5
 scene 011, store 
 mview store, 330, scene=011
 
@@ -429,18 +586,13 @@ super 3hmx_h and resi 1-98, 2xwt_h and resi 1-98
 super A1, 2b1a_h and resi 1-98
 super B1, 2xwt_h and resi 1-98
 super C1, 3hmx_h and resi 1-98
-pseudoatom title_5, 2xwt_h
-hide nonbonded, title_5
-translate [0,40,0], object=title_5
-label title_5, "With unique somatic mutations that altered framework and CDR3 structure"
-show labels, title_5
-set_view (\
-    -0.992779553,   -0.119716585,    0.004772634,\
-    -0.055808492,    0.426833898,   -0.902588844,\
-     0.106016770,   -0.896369994,   -0.430436313,\
-     0.000191912,    0.000052718, -182.240753174,\
-     7.153404236,  -15.651230812,    4.890758514,\
-   133.269271851,  231.092132568,  -20.000000000 )
+# set_view (\
+#     -0.992779553,   -0.119716585,    0.004772634,\
+#     -0.055808492,    0.426833898,   -0.902588844,\
+#      0.106016770,   -0.896369994,   -0.430436313,\
+#      0.000191912,    0.000052718, -182.240753174,\
+#      7.153404236,  -15.651230812,    4.890758514,\
+#    133.269271851,  231.092132568,  -20.000000000 )
 mview store, object=3hmx_h
 mview store, object=2b1a_h
 mview store, object=2xwt_h
@@ -457,6 +609,9 @@ mview store, 400, scene=012
 
 frame 430
 hide surface, *_h
+my_rotate 180, 3hmx_h
+my_rotate 180, 2b1a_h
+my_rotate 180, 2xwt_h
 mview store, object=3hmx_h
 mview store, object=2b1a_h
 mview store, object=2xwt_h
@@ -467,21 +622,136 @@ scene 013, store
 mview store, 430, scene=013
 
 frame 460
-show sticks, A1
+show sticks, 2b1a_muts + 2xwt_muts + 3hmx_muts
+color red, 2b1a_muts
+color green, 2xwt_muts
+color blue, 3hmx_muts
+my_rotate 180, 3hmx_h
+my_rotate 180, 2b1a_h
+my_rotate 180, 2xwt_h
+super 2b1a_h and resi 1-98, 2xwt_h and resi 1-98
+super 3hmx_h and resi 1-98, 2xwt_h and resi 1-98
 mview store, object=3hmx_h
 mview store, object=2b1a_h
 mview store, object=2xwt_h
 mview reinterpolate, object=3hmx_h
 mview reinterpolate, object=2b1a_h
 mview reinterpolate, object=2xwt_h 
-mview store, object=A1
-mview reinterpolate, object=A1
 scene 014, store
 mview store, 460, scene=014
 
 
+frame 560
+super 3hmx_h, 3hmx_h_copy
+super 2b1a_h, 2b1a_h_copy
+super 2xwt_h, 2xwt_h_copy
+hide sticks, 2b1a_muts + 2xwt_muts + 3hmx_muts
+super A1, 2b1a_muts
+super B1, 2xwt_muts
+align C1, 3hmx_muts
+show sticks, A1 + B1 + C1
+color grey20, 3hmx_h + 2b1a_h + 2xwt_h
+show cartoon, heavy
+mview store, object=3hmx_h
+mview store, object=2b1a_h
+mview store, object=2xwt_h
+mview store, object=3hmx_h_copy
+mview store, object=2b1a_h_copy
+mview store, object=2xwt_h_copy
+mview store, object=A1
+mview store, object=B1
+mview store, object=C1
+mview reinterpolate, object=3hmx_h
+mview reinterpolate, object=2b1a_h
+mview reinterpolate, object=2xwt_h
+scene 015, store
+mview store, 560, scene=015
+
+madd 1 -50 
+
+frame 610
+pseudoatom title_6, 2xwt_h,state=1
+hide labels, title_5
+hide nonbonded, title_6
+translate [0,40,0], object=title_6
+label title_6, "Rosetta designs positions for all states simultaneously"
+show labels, title_6
+scene 016, store 
+mview store, scene=016
+
+madd 1 -50 
+
+frame 660
+pseudoatom title_7, 2xwt_h,state=1
+hide labels, title_6
+hide nonbonded, title_7
+translate [0,40,0], object=title_7
+label title_7, "Only accepting sequences that benefit all complexes"
+show labels, title_7
+scene 017, store
+mview store, 660, scene=017
 
 
+madd 1 -50 
+frame 710
+pseudoatom title_8, 2xwt_h,state=1
+hide labels, title_7
+hide nonbonded, title_8
+translate [0,40,0], object=title_8
+label title_8, "That favor binding to different light chains..."
+show cartoon, 2xwt_l + 2b1a_l + 3hmx_l 
+mview store, object=3hmx_h
+mview store, object=2b1a_h
+mview store, object=2xwt_h
+mview store, object=3hmx_l
+mview store, object=2b1a_l
+mview store, object=2xwt_l
+scene 018, store
+mview store, 710, scene=018
 
+madd 1 -50 
+frame 760
+pseudoatom title_9, 2xwt_h,state=1
+hide labels, title_8
+hide nonbonded, title_9
+translate [0,70,0], object=title_9
+label title_9, "and to different antigens"
+show cartoon, antigens
+mview store, object=3hmx_h
+mview store, object=2b1a_h
+mview store, object=2xwt_h
+mview store, object=3hmx_l
+mview store, object=2b1a_l
+mview store, object=2xwt_l
+mview store, object=3hmx_ant
+mview store, object=2b1a_ant
+mview store, object=2xwt_ant
+scene 019, store
+mview store, 760, scene=019
+
+madd 1 -50
+frame 810
+show surface, 2xwt_h and not 2xwt_muts
+show surface, 2b1a_h and not 2b1a_muts
+show surface, 3hmx_h and not 3hmx_muts
+show surface, A1 + B1 + C1
+show surface, antigens
+show surface, light
+mview store, object=3hmx_ant
+mview store, object=2b1a_ant
+mview store, object=2xwt_ant
+mview store, object=A1
+mview store, object=B1
+mview store, object=C1
+scene 020, store
+mview store, 810, scene=020
+
+madd 1 -50
+frame 870
+mview store, object=A1
+mview store, object=B1
+mview store, object=C1
+scene 021, store
+mview store, 870, scene=021
 
 
